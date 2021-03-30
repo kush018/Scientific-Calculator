@@ -84,6 +84,9 @@ public class Calculator {
         basicButtonsList.add(new JButton("."));
         basicButtonsList.add(new JButton("+"));
         basicButtonsList.add(new JButton("="));
+        basicButtonsList.add(new JButton("MC"));
+        basicButtonsList.add(new JButton("DEG"));
+        basicButtonsList.add(new JButton("RAD"));
 
         for (JButton button : basicButtonsList) {
             button.setFocusable(false);
@@ -233,7 +236,7 @@ public class Calculator {
                     display.setText(display.getText().substring(0, display.getText().length() - 1));
                 }
             }
-        } else if (text.equals("+") || text.equals("-") || text.equals("*") || text.equals("/") || text.equals("%")) {
+        } else if (text.equals("+") || text.equals("-") || text.equals("*") || text.equals("/") || text.equals("%") || text.equals("nPk") || text.equals("nCk") || text.equals("x^y") || text.equals("x^(1/y)")) {
             if (status == BEGIN) {
                 resetDisplay = true;
                 status = ENTER_OPERATION;
@@ -268,6 +271,14 @@ public class Calculator {
             if (status == ENTER_OPERATION) {
                 status = ENTER_OPERAND2;
             }
+        } else if (text.equals("log") || text.equals("ln") || text.equals("!") || text.equals("10^x") || text.equals("e^x") || text.equals("1/x") || text.equals("x^2") || text.equals("x^3") || text.equals("sin") || text.equals("arcsin") || text.equals("sqrt") || text.equals("cbrt") || text.equals("cos") || text.equals("arccos") || text.equals("tan") || text.equals("arctan") || text.equals("DEG") || text.equals("RAD")) {
+            display.setText(Double.toString(evaluateUnary(Double.parseDouble(display.getText()), text)));
+            resetDisplay = true;
+            if (status == ENTER_OPERATION) {
+                status = ENTER_OPERAND2;
+            }
+        } else if (text.equals("MC")) {
+            memory = 0d;
         }
     }
 
@@ -278,6 +289,34 @@ public class Calculator {
             case "*" -> op1 * op2;
             case "/" -> op1 / op2;
             case "%" -> op1 % op2;
+            case "nPk" -> nPk(op1, op2);
+            case "nCk" -> nCk(op1, op2);
+            case "x^y" -> Math.pow(op1, op2);
+            case "x^(1/y)" -> Math.pow(op1, 1/op2);
+            default -> 0d;
+        };
+    }
+
+    public double evaluateUnary(double n, String operation) {
+        return switch (operation) {
+            case "log" -> Math.log10(n);
+            case "ln" -> Math.log(n);
+            case "!" -> factorial(n);
+            case "10^x" -> Math.pow(10, n);
+            case "e^x" -> Math.pow(Math.E, n);
+            case "1/x" -> (1/n);
+            case "x^2" -> n * n;
+            case "x^3" -> n * n * n;
+            case "sin" -> Math.sin(n);
+            case "arcsin" -> Math.asin(n);
+            case "sqrt" -> Math.sqrt(n);
+            case "cbrt" -> Math.cbrt(n);
+            case "cos" -> Math.cos(n);
+            case "arccos" -> Math.acos(n);
+            case "tan" -> Math.tan(n);
+            case "arctan" -> Math.atan(n);
+            case "DEG" -> Math.toDegrees(n);
+            case "RAD" -> Math.toRadians(n);
             default -> 0d;
         };
     }
@@ -297,6 +336,22 @@ public class Calculator {
             case "mn" -> Constants.MN;
             default -> 0d;
         };
+    }
+
+    public double factorial(double n) {
+        double answer = 1d;
+        for (double i = 1; i <= n; i++) {
+            answer *= i;
+        }
+        return answer;
+    }
+
+    public double nPk(double op1, double op2) {
+        return factorial(op1) / factorial(op1 - op2);
+    }
+
+    public double nCk(double op1, double op2) {
+        return factorial(op1) / (factorial(op2) * factorial(op1 - op2));
     }
 
 }
