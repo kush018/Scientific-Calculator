@@ -49,6 +49,8 @@ public class Calculator {
         ImageIcon icon = new ImageIcon("icon.png");
         frame.setIconImage(icon.getImage());
 
+        ActionListener buttonListener = (e) -> buttonPressed(((JButton) e.getSource()).getText());
+
         panelPanel = new JPanel();
         panelPanel.setLayout(new GridLayout(1, 2, 20, 10));
 
@@ -83,13 +85,9 @@ public class Calculator {
         basicButtonsList.add(new JButton("+"));
         basicButtonsList.add(new JButton("="));
 
-        ActionListener basicButtonsListener = (e) -> {
-            buttonPressed( ((JButton) e.getSource()).getText() );
-        };
-
         for (JButton button : basicButtonsList) {
             button.setFocusable(false);
-            button.addActionListener(basicButtonsListener);
+            button.addActionListener(buttonListener);
             basicButtonsPanel.add(button);
         }
 
@@ -120,6 +118,7 @@ public class Calculator {
 
         for (JButton button : scientificButtonsList) {
             button.setFocusable(false);
+            button.addActionListener(buttonListener);
             scientificButtonsPanel.add(button);
         }
 
@@ -137,7 +136,6 @@ public class Calculator {
         constantButtonsList.add(new JButton("c"));
         constantButtonsList.add(new JButton("h"));
         constantButtonsList.add(new JButton("R"));
-        constantButtonsList.add(new JButton("ke"));
         constantButtonsList.add(new JButton("G"));
         constantButtonsList.add(new JButton("Na"));
         constantButtonsList.add(new JButton("qe"));
@@ -147,6 +145,7 @@ public class Calculator {
 
         for (JButton button : constantButtonsList) {
             button.setFocusable(false);
+            button.addActionListener(buttonListener);
             constantsPanel.add(button);
         }
 
@@ -262,6 +261,13 @@ public class Calculator {
                 status = BEGIN;
                 resetDisplay = true;
             }
+        } else if (text.equals("pi") || text.equals("e") || text.equals("c") || text.equals("h") || text.equals("R") || text.equals("G") || text.equals("Na") || text.equals("qe") || text.equals("me") || text.equals("mp") || text.equals("mn")) {
+            //for any constant button
+            display.setText(Double.toString(evaluateConstants(text)));
+            resetDisplay = true;
+            if (status == ENTER_OPERATION) {
+                status = ENTER_OPERAND2;
+            }
         }
     }
 
@@ -272,6 +278,23 @@ public class Calculator {
             case "*" -> op1 * op2;
             case "/" -> op1 / op2;
             case "%" -> op1 % op2;
+            default -> 0d;
+        };
+    }
+
+    public double evaluateConstants(String constant) {
+        return switch (constant) {
+            case "pi" -> Constants.PI;
+            case "e" -> Constants.E;
+            case "c" -> Constants.C;
+            case "h" -> Constants.H;
+            case "R" -> Constants.R;
+            case "G" -> Constants.G;
+            case "Na" -> Constants.NA;
+            case "qe" -> Constants.QE;
+            case "me" -> Constants.ME;
+            case "mp" -> Constants.MP;
+            case "mn" -> Constants.MN;
             default -> 0d;
         };
     }
