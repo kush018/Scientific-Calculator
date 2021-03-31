@@ -16,7 +16,7 @@ public class Calculator {
 
     private ArrayList<JButton> basicButtonsList;
     private ArrayList<JButton> scientificButtonsList;
-    private ArrayList<JButton> constantButtonsList;
+    //private ArrayList<JButton> constantButtonsList;
 
     private JLabel display;
 
@@ -44,7 +44,7 @@ public class Calculator {
 
         frame = new JFrame("Scientific Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout(0, 20));
+        frame.setLayout(new BorderLayout(0, 10));
 
         ImageIcon icon = new ImageIcon("icon.png");
         frame.setIconImage(icon.getImage());
@@ -131,7 +131,9 @@ public class Calculator {
         frame.add(panelPanel, BorderLayout.CENTER);
 
         constantsPanel = new JPanel();
-        constantsPanel.setLayout(new GridLayout(2, 9, 10, 10));
+        constantsPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
+
+        /*
 
         constantButtonsList = new ArrayList<>();
         constantButtonsList.add(new JButton("pi"));
@@ -149,8 +151,19 @@ public class Calculator {
         for (JButton button : constantButtonsList) {
             button.setFocusable(false);
             button.addActionListener(buttonListener);
+            button.setPreferredSize(new Dimension(50, 50));
             constantsPanel.add(button);
         }
+         */
+
+        String[] constants = {"pi", "e", "c", "h", "R", "G", "Na", "qe", "me", "mp", "mn"};
+        JComboBox constantsComboBox = new JComboBox(constants);
+        constantsComboBox.addActionListener((e) -> {
+            buttonPressed((String) constantsComboBox.getSelectedItem());
+        });
+        constantsComboBox.setPreferredSize(new Dimension(50, 32));
+
+        constantsPanel.add(constantsComboBox);
 
         frame.add(constantsPanel, BorderLayout.SOUTH);
 
