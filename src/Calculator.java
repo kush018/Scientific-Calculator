@@ -37,6 +37,9 @@ public class Calculator {
 
     private double op1;
 
+    private static final float BUTTON_FONT = 15f;
+    private static final float DISPLAY_FONT = 55f;
+
     public Calculator() {
         resetDisplay = false;
         status = BEGIN;
@@ -45,9 +48,23 @@ public class Calculator {
         operation = "";
         op1 = 0d;
 
+        Font robotoFont = null;
+        try {
+            robotoFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Roboto-Thin.ttf"));
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        assert robotoFont != null;
+
         frame = new JFrame("Scientific Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(0, 10));
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         //probably should replace this with key bindings
         KeyListener keyListener = new KeyAdapter() {
@@ -140,6 +157,7 @@ public class Calculator {
         for (JButton button : basicButtonsList) {
             button.setFocusable(false);
             button.addActionListener(buttonListener);
+            button.setFont(robotoFont.deriveFont(BUTTON_FONT));
             basicButtonsPanel.add(button);
         }
 
@@ -171,6 +189,7 @@ public class Calculator {
         for (JButton button : scientificButtonsList) {
             button.setFocusable(false);
             button.addActionListener(buttonListener);
+            button.setFont(robotoFont.deriveFont(BUTTON_FONT));
             scientificButtonsPanel.add(button);
         }
 
@@ -211,6 +230,8 @@ public class Calculator {
             buttonPressed((String) constantsComboBox.getSelectedItem());
         });
         constantsComboBox.setPreferredSize(new Dimension(50, 32));
+        constantsComboBox.setFocusable(false);
+        constantsComboBox.setFont(robotoFont.deriveFont(BUTTON_FONT));
 
         constantsPanel.add(constantsComboBox);
 
@@ -219,16 +240,8 @@ public class Calculator {
         display = new JLabel("0");
         display.setHorizontalAlignment(JLabel.RIGHT);
 
-        Font digitalFont = null;
-        try {
-            digitalFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/digital-7.ttf"));
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        assert digitalFont != null;
-
-        display.setFont(digitalFont.deriveFont(60f));
-        display.setPreferredSize(new Dimension(0, 60));
+        display.setFont(robotoFont.deriveFont(DISPLAY_FONT));
+        //display.setPreferredSize(new Dimension(0, 60));
 
         frame.add(display, BorderLayout.NORTH);
 
