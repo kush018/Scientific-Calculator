@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +48,52 @@ public class Calculator {
         frame = new JFrame("Scientific Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(0, 10));
+
+        //probably should replace this with key bindings
+        KeyListener keyListener = new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                switch (e.getKeyChar()) {
+                    case '0' -> findButtonByText("0", basicButtonsList).doClick();
+                    case '1' -> findButtonByText("1", basicButtonsList).doClick();
+                    case '2' -> findButtonByText("2", basicButtonsList).doClick();
+                    case '3' -> findButtonByText("3", basicButtonsList).doClick();
+                    case '4' -> findButtonByText("4", basicButtonsList).doClick();
+                    case '5' -> findButtonByText("5", basicButtonsList).doClick();
+                    case '6' -> findButtonByText("6", basicButtonsList).doClick();
+                    case '7' -> findButtonByText("7", basicButtonsList).doClick();
+                    case '8' -> findButtonByText("8", basicButtonsList).doClick();
+                    case '9' -> findButtonByText("9", basicButtonsList).doClick();
+                    case '.' -> findButtonByText(".", basicButtonsList).doClick();
+                    case '+' -> findButtonByText("+", basicButtonsList).doClick();
+                    case '-' -> findButtonByText("-", basicButtonsList).doClick();
+                    case '*' -> findButtonByText("*", basicButtonsList).doClick();
+                    case '/' -> findButtonByText("/", basicButtonsList).doClick();
+                    case '%' -> findButtonByText("%", basicButtonsList).doClick();
+                    case 'E', 'e' -> findButtonByText("EXP", basicButtonsList).doClick();
+                    case 'A', 'a' -> findButtonByText("ANS", basicButtonsList).doClick();
+                    case 'D', 'd' -> findButtonByText("DEG", basicButtonsList).doClick();
+                    case 'R', 'r' -> findButtonByText("RAD", basicButtonsList).doClick();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_ENTER -> findButtonByText("=", basicButtonsList).doClick();
+                    case KeyEvent.VK_BACK_SPACE, KeyEvent.VK_DELETE -> findButtonByText("DEL", basicButtonsList).doClick();
+                    case KeyEvent.VK_ESCAPE -> findButtonByText("AC", basicButtonsList).doClick();
+                    case KeyEvent.VK_F1 -> findButtonByText("C", basicButtonsList).doClick();
+                    case KeyEvent.VK_F12 -> findButtonByText("MC", basicButtonsList).doClick();
+                    case KeyEvent.VK_F8 -> findButtonByText("MR", basicButtonsList).doClick();
+                    case KeyEvent.VK_F5 -> findButtonByText("M+", basicButtonsList).doClick();
+                    case KeyEvent.VK_F6 -> findButtonByText("M-", basicButtonsList).doClick();
+                    case KeyEvent.VK_SHIFT -> findButtonByText("+/-", basicButtonsList).doClick();
+                }
+            }
+        };
+
+        frame.addKeyListener(keyListener);
 
         ImageIcon icon = new ImageIcon("icon.png");
         frame.setIconImage(icon.getImage());
@@ -186,6 +235,8 @@ public class Calculator {
         frame.pack();
 
         frame.setVisible(true);
+
+        frame.requestFocus();
     }
 
     private void buttonPressed(String text) {
@@ -365,6 +416,15 @@ public class Calculator {
 
     public double nCk(double op1, double op2) {
         return factorial(op1) / (factorial(op2) * factorial(op1 - op2));
+    }
+
+    public JButton findButtonByText(String text, ArrayList<JButton> buttonArrayList) {
+        for (JButton button : buttonArrayList) {
+            if (text.equals(button.getText())) {
+                return button;
+            }
+        }
+        return null;
     }
 
 }
