@@ -286,22 +286,36 @@ public class Calculator {
     }
 
     private void buttonPressed(String text) {
-        if (text.equals("0") || text.equals("1") || text.equals("2") || text.equals("3") || text.equals("4") || text.equals("5") || text.equals("6") || text.equals("7") || text.equals("8") || text.equals("9") || text.equals(".")) {
+        if (text.equals("0") || text.equals("1") || text.equals("2") || text.equals("3") || text.equals("4") || text.equals("5") || text.equals("6") || text.equals("7") || text.equals("8") || text.equals("9")) {
             if (resetDisplay) {
                 display.setText(text);
                 resetDisplay = false;
             } else {
-                display.setText(display.getText() + text);
+                if (display.getText().length() == 1 && display.getText().charAt(0) == '0') {
+                    display.setText(text);
+                } else {
+                    display.setText(display.getText() + text);
+                }
             }
             if (status == ENTER_OPERATION) {
                 status = ENTER_OPERAND2;
             }
         } else if (text.equals("EXP")) {
             if (resetDisplay) {
-                display.setText("E");
+                display.setText("0E");
                 resetDisplay = false;
             } else {
                 display.setText(display.getText() + "E");
+            }
+            if (status == ENTER_OPERATION) {
+                status = ENTER_OPERAND2;
+            }
+        } else if (text.equals(".")) {
+            if (resetDisplay) {
+                display.setText("0.");
+                resetDisplay = false;
+            } else {
+                display.setText(display.getText() + ".");
             }
             if (status == ENTER_OPERATION) {
                 status = ENTER_OPERAND2;
@@ -342,8 +356,10 @@ public class Calculator {
                 display.setText("0");
                 resetDisplay = false;
             } else {
-                if (!(Double.parseDouble(display.getText()) == 0d)) {
+                if (!(display.getText().length() == 1)) {
                     display.setText(display.getText().substring(0, display.getText().length() - 1));
+                } else {
+                    display.setText("0");
                 }
             }
         } else if (text.equals("+") || text.equals("-") || text.equals("*") || text.equals("/") || text.equals("%") || text.equals("nPk") || text.equals("nCk") || text.equals("x^y") || text.equals("x^(1/y)")) {
