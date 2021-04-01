@@ -371,10 +371,10 @@ public class Calculator {
             }
         } else if (text.equals("+") || text.equals("-") || text.equals("*") || text.equals("/") || text.equals("%") || text.equals("nPk") || text.equals("nCk") || text.equals("x^y") || text.equals("x^(1/y)")) {
             if (status == BEGIN) {
+                op1 = Double.parseDouble(display.getText());
                 resetDisplay = true;
                 status = ENTER_OPERATION;
                 operation = text;
-                op1 = Double.parseDouble(display.getText());
             } else if (status == ENTER_OPERATION) {
                 operation = text;
             } else if (status == ENTER_OPERAND2) {
