@@ -14,6 +14,7 @@ public class Calculator {
     private JPanel constantsPanel;
 
     private JPanel panelPanel;
+    private JPanel panelPanelPanel;
 
     private JFrame frame;
 
@@ -40,6 +41,8 @@ public class Calculator {
     private static final float BUTTON_FONT = 15f;
     private static final float DISPLAY_FONT = 55f;
 
+    private boolean isDegrees;
+
     public Calculator() {
         resetDisplay = false;
         status = BEGIN;
@@ -47,6 +50,7 @@ public class Calculator {
         memory = 0d;
         operation = "";
         op1 = 0d;
+        isDegrees = true;
 
         Font robotoFont = null;
         try {
@@ -116,6 +120,32 @@ public class Calculator {
         frame.setIconImage(icon.getImage());
 
         ActionListener buttonListener = (e) -> buttonPressed(((JButton) e.getSource()).getText());
+
+        panelPanelPanel = new JPanel();
+        panelPanelPanel.setLayout(new BorderLayout(0, 10));
+
+        JRadioButton degButton = new JRadioButton("deg");
+        JRadioButton radButton = new JRadioButton("rad");
+        degButton.addActionListener((e) -> isDegrees = true);
+        radButton.addActionListener((e) -> isDegrees = false);
+        degButton.setFocusable(false);
+        radButton.setFocusable(false);
+        degButton.setSelected(true);
+        radButton.setSelected(false);
+        degButton.setFont(robotoFont.deriveFont(BUTTON_FONT));
+        radButton.setFont(robotoFont.deriveFont(BUTTON_FONT));
+
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(degButton);
+        buttonGroup.add(radButton);
+
+        JPanel radioButtonPanel = new JPanel();
+        radioButtonPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 0));
+
+        radioButtonPanel.add(degButton);
+        radioButtonPanel.add(radButton);
+
+        panelPanelPanel.add(radioButtonPanel, BorderLayout.NORTH);
 
         panelPanel = new JPanel();
         panelPanel.setLayout(new GridLayout(1, 2, 20, 10));
@@ -196,7 +226,9 @@ public class Calculator {
         panelPanel.add(scientificButtonsPanel);
         panelPanel.add(basicButtonsPanel);
 
-        frame.add(panelPanel, BorderLayout.CENTER);
+        panelPanelPanel.add(panelPanel, BorderLayout.CENTER);
+
+        frame.add(panelPanelPanel, BorderLayout.CENTER);
 
         constantsPanel = new JPanel();
         constantsPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
@@ -385,14 +417,14 @@ public class Calculator {
             case "1/x" -> (1/n);
             case "x^2" -> n * n;
             case "x^3" -> n * n * n;
-            case "sin" -> Math.sin(n);
-            case "arcsin" -> Math.asin(n);
+            case "sin" -> isDegrees ? Math.sin(Math.toRadians(n)) : Math.sin(n);
+            case "arcsin" -> isDegrees ? Math.toDegrees(Math.asin(n)) : Math.asin(n);
             case "sqrt" -> Math.sqrt(n);
             case "cbrt" -> Math.cbrt(n);
-            case "cos" -> Math.cos(n);
-            case "arccos" -> Math.acos(n);
-            case "tan" -> Math.tan(n);
-            case "arctan" -> Math.atan(n);
+            case "cos" -> isDegrees ? Math.cos(Math.toRadians(n)) : Math.cos(n);
+            case "arccos" -> isDegrees ? Math.toDegrees(Math.acos(n)) : Math.acos(n);
+            case "tan" -> isDegrees ? Math.tan(Math.toRadians(n)) : Math.tan(n);
+            case "arctan" -> isDegrees ? Math.toDegrees(Math.atan(n)) : Math.atan(n);
             case "DEG" -> Math.toDegrees(n);
             case "RAD" -> Math.toRadians(n);
             default -> 0d;
@@ -420,6 +452,9 @@ public class Calculator {
         double answer = 1d;
         for (double i = 1; i <= n; i++) {
             answer *= i;
+            if (answer == Double.parseDouble("Infinity")) {
+                break;
+            }
         }
         return answer;
     }
