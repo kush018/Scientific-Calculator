@@ -409,7 +409,7 @@ public class Calculator {
     }
 
     public double evaluate(double op1, double op2, String operation) {
-        return switch (operation) {
+        double ans = switch (operation) {
             case "+" -> op1 + op2;
             case "-" -> op1 - op2;
             case "*" -> op1 * op2;
@@ -421,10 +421,11 @@ public class Calculator {
             case "x^(1/y)" -> Math.pow(op1, 1/op2);
             default -> 0d;
         };
+        return roundDouble(ans);
     }
 
     public double evaluateUnary(double n, String operation) {
-        return switch (operation) {
+        double ans = switch (operation) {
             case "log" -> Math.log10(n);
             case "ln" -> Math.log(n);
             case "!" -> factorial(n);
@@ -445,6 +446,7 @@ public class Calculator {
             case "RAD" -> Math.toRadians(n);
             default -> 0d;
         };
+        return roundDouble(ans);
     }
 
     public double evaluateConstants(String constant) {
@@ -490,6 +492,13 @@ public class Calculator {
             }
         }
         return null;
+    }
+
+    public double roundDouble(double n) {
+        n *= Math.pow(10, 13);
+        n = Math.round(n);
+        n /= Math.pow(10, 13);
+        return n;
     }
 
 }
