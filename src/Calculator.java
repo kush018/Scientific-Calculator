@@ -502,9 +502,11 @@ public class Calculator {
     }
 
     public double roundDouble(double n) {
-        n *= Math.pow(10, 13);
-        n = Math.round(n);
-        n /= Math.pow(10, 13);
+        if (-Math.pow(2, 63) <= n && n <= Math.pow(2, 63) - 1) {
+            n *= Math.pow(10, 13);
+            n = Math.round(n);
+            n /= Math.pow(10, 13);
+        }
         return n;
     }
 
