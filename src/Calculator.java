@@ -91,6 +91,7 @@ public class Calculator {
                     case 'A', 'a' -> findButtonByText("ANS", basicButtonsList).doClick();
                     case 'D', 'd' -> findButtonByText("DEG", basicButtonsList).doClick();
                     case 'R', 'r' -> findButtonByText("RAD", basicButtonsList).doClick();
+                    case 'M', 'm' -> findButtonByText("+/-", basicButtonsList).doClick();
                 }
             }
 
@@ -105,7 +106,6 @@ public class Calculator {
                     case KeyEvent.VK_F8 -> findButtonByText("MR", basicButtonsList).doClick();
                     case KeyEvent.VK_F5 -> findButtonByText("M+", basicButtonsList).doClick();
                     case KeyEvent.VK_F6 -> findButtonByText("M-", basicButtonsList).doClick();
-                    case KeyEvent.VK_SHIFT -> findButtonByText("+/-", basicButtonsList).doClick();
                 }
             }
         };
@@ -241,6 +241,7 @@ public class Calculator {
         display.setHorizontalAlignment(JLabel.RIGHT);
 
         display.setFont(robotoFont.deriveFont(DISPLAY_FONT));
+        display.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         //display.setPreferredSize(new Dimension(0, 60));
 
         frame.add(display, BorderLayout.NORTH);
