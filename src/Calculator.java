@@ -119,7 +119,14 @@ public class Calculator {
         ImageIcon icon = new ImageIcon("icon.png");
         frame.setIconImage(icon.getImage());
 
-        ActionListener buttonListener = (e) -> buttonPressed(((JButton) e.getSource()).getText());
+        ActionListener buttonListener = (e) -> {
+            try {
+                buttonPressed(((JButton) e.getSource()).getText());
+            } catch (NumberFormatException ex) {
+                display.setText("0");
+                resetDisplay = false;
+            }
+        };
 
         panelPanelPanel = new JPanel();
         panelPanelPanel.setLayout(new BorderLayout(0, 10));
