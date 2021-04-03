@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class Calculator {
@@ -502,14 +504,9 @@ public class Calculator {
     }
 
     public double roundDouble(double n) {
-        double r = 0d;
-        r = n * Math.pow(10, 13);
-        if (-Math.pow(2, 63) <= r && r <= Math.pow(2, 63) - 1) {
-            r = Math.round(r);
-            r /= Math.pow(10, 13);
-            return r;
-        }
-        return n;
+        BigDecimal bd = BigDecimal.valueOf(n);
+        bd = bd.setScale(10, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 }
