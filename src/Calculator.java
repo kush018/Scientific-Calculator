@@ -459,7 +459,7 @@ public class Calculator {
     }
 
     public double evaluateConstants(String constant) {
-        return switch (constant) {
+        double ans = switch (constant) {
             case "pi" -> Constants.PI;
             case "e" -> Constants.E;
             case "c" -> Constants.C;
@@ -473,6 +473,7 @@ public class Calculator {
             case "mn" -> Constants.MN;
             default -> 0d;
         };
+        return roundDouble(ans);
     }
 
     public double factorial(double n) {
