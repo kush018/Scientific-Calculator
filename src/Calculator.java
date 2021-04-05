@@ -50,6 +50,8 @@ public class Calculator {
 
     private ArrayList<String> historyList;
 
+    private boolean clearHistory;
+
     public Calculator() {
         resetDisplay = false;
         status = BEGIN;
@@ -60,6 +62,8 @@ public class Calculator {
         isDegrees = true;
 
         historyList = new ArrayList<>();
+
+        clearHistory = false;
 
         Font robotoFont = null;
         try {
@@ -312,6 +316,10 @@ public class Calculator {
     }
 
     private void buttonPressed(String text) {
+        if (clearHistory) {
+            clearHistory();
+            clearHistory = false;
+        }
         if (text.equals("0") || text.equals("1") || text.equals("2") || text.equals("3") || text.equals("4") || text.equals("5") || text.equals("6") || text.equals("7") || text.equals("8") || text.equals("9")) {
             if (resetDisplay) {
                 display.setText(text);
@@ -421,18 +429,27 @@ public class Calculator {
             }
         } else if (text.equals("=")) {
             if (status == ENTER_OPERAND2) {
+                historyList.add(display.getText());
                 answer = evaluate(op1, Double.parseDouble(display.getText()), operation);
                 display.setText(Double.toString(answer));
                 op1 = answer;
                 resetDisplay = true;
                 status = BEGIN;
-            } else if (status == ENTER_OPERATION || status == BEGIN) {
+            } else if (status == ENTER_OPERATION) {
+                historyList.remove(historyList.size() - 1);
+                answer = Double.parseDouble(display.getText());
+                status = BEGIN;
+                resetDisplay = true;
+            } else if (status == BEGIN) {
+                historyList.add(display.getText());
                 answer = Double.parseDouble(display.getText());
                 status = BEGIN;
                 resetDisplay = true;
             }
             operation = "";
-            clearHistory();
+            historyList.add("=");
+            clearHistory = true;
+            refreshHistory();
         } else if (text.equals("pi") || text.equals("e") || text.equals("c") || text.equals("h") || text.equals("R") || text.equals("G") || text.equals("Na") || text.equals("qe") || text.equals("me") || text.equals("mp") || text.equals("mn")) {
             //for any constant button
             display.setText(Double.toString(evaluateConstants(text)));
