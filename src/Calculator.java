@@ -400,12 +400,13 @@ public class Calculator {
                 historyList.add(operation);
                 refreshHistory();
             } else if (status == ENTER_OPERATION) {
-                if (!operation.equals("")) {
+                boolean operationAlreadyEntered = !operation.equals("");
+                operation = text;
+                if (operationAlreadyEntered) {
                     historyList.set(historyList.size() - 1, operation);
                 } else {
                     historyList.add(operation);
                 }
-                operation = text;
                 refreshHistory();
             } else if (status == ENTER_OPERAND2) {
                 historyList.add(display.getText());
