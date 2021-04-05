@@ -81,7 +81,7 @@ Required to make sure the program is up-to-date with all the latest updates
 To update the source code in your local clone of the repository, type:
 
 ```
-git clone https://github.com/kush018/Scientific-Calculator.git
+git pull https://github.com/kush018/Scientific-Calculator.git
 ```
 
 Then, you will have to execute the commands given above to compile the program
