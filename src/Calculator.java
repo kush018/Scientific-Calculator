@@ -42,8 +42,13 @@ public class Calculator {
 
     private static final float BUTTON_FONT = 15f;
     private static final float DISPLAY_FONT = 55f;
+    private static final float HISTORY_FONT = 15f;
 
     private boolean isDegrees;
+
+    private JLabel history;
+
+    private ArrayList<String> historyList;
 
     public Calculator() {
         resetDisplay = false;
@@ -53,6 +58,8 @@ public class Calculator {
         operation = "";
         op1 = 0d;
         isDegrees = true;
+
+        historyList = new ArrayList<>();
 
         Font robotoFont = null;
         try {
@@ -160,7 +167,7 @@ public class Calculator {
         panelPanel.setLayout(new GridLayout(1, 2, 20, 10));
 
         basicButtonsPanel = new JPanel();
-        basicButtonsPanel.setLayout(new GridLayout(6, 5, 10,10));
+        basicButtonsPanel.setLayout(new GridLayout(6, 5, 10, 10));
 
         basicButtonsList = new ArrayList<>();
         basicButtonsList.add(new JButton("M+"));
@@ -278,14 +285,24 @@ public class Calculator {
 
         frame.add(constantsPanel, BorderLayout.SOUTH);
 
+        JPanel displayPanel = new JPanel();
+        displayPanel.setLayout(new BorderLayout(0, 0));
+
+        history = new JLabel("");
+        history.setHorizontalAlignment(JLabel.RIGHT);
+        history.setFont(robotoFont.deriveFont(HISTORY_FONT));
+        //history.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+
         display = new JLabel("0");
         display.setHorizontalAlignment(JLabel.RIGHT);
-
         display.setFont(robotoFont.deriveFont(DISPLAY_FONT));
         display.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         //display.setPreferredSize(new Dimension(0, 60));
 
-        frame.add(display, BorderLayout.NORTH);
+        displayPanel.add(history, BorderLayout.NORTH);
+        displayPanel.add(display, BorderLayout.CENTER);
+
+        frame.add(displayPanel, BorderLayout.NORTH);
 
         frame.pack();
 
@@ -350,6 +367,8 @@ public class Calculator {
             status = BEGIN;
             display.setText("0");
             resetDisplay = false;
+            operation = "";
+            clearHistory();
         } else if (text.equals("M+")) {
             memory += Double.parseDouble(display.getText());
         } else if (text.equals("M-")) {
@@ -377,15 +396,27 @@ public class Calculator {
                 resetDisplay = true;
                 status = ENTER_OPERATION;
                 operation = text;
+                historyList.add(display.getText());
+                historyList.add(operation);
+                refreshHistory();
             } else if (status == ENTER_OPERATION) {
+                if (!operation.equals("")) {
+                    historyList.set(historyList.size() - 1, operation);
+                } else {
+                    historyList.add(operation);
+                }
                 operation = text;
+                refreshHistory();
             } else if (status == ENTER_OPERAND2) {
+                historyList.add(display.getText());
                 double ans = evaluate(op1, Double.parseDouble(display.getText()), operation);
                 display.setText(Double.toString(ans));
                 op1 = ans;
                 resetDisplay = true;
                 status = ENTER_OPERATION;
                 operation = text;
+                historyList.add(operation);
+                refreshHistory();
             }
         } else if (text.equals("=")) {
             if (status == ENTER_OPERAND2) {
@@ -399,6 +430,8 @@ public class Calculator {
                 status = BEGIN;
                 resetDisplay = true;
             }
+            operation = "";
+            clearHistory();
         } else if (text.equals("pi") || text.equals("e") || text.equals("c") || text.equals("h") || text.equals("R") || text.equals("G") || text.equals("Na") || text.equals("qe") || text.equals("me") || text.equals("mp") || text.equals("mn")) {
             //for any constant button
             display.setText(Double.toString(evaluateConstants(text)));
@@ -427,7 +460,7 @@ public class Calculator {
             case "nPk" -> nPk(op1, op2);
             case "nCk" -> nCk(op1, op2);
             case "x^y" -> Math.pow(op1, op2);
-            case "x^(1/y)" -> Math.pow(op1, 1/op2);
+            case "x^(1/y)" -> Math.pow(op1, 1 / op2);
             default -> 0d;
         };
         return roundDouble(ans);
@@ -440,7 +473,7 @@ public class Calculator {
             case "!" -> factorial(n);
             case "10^x" -> Math.pow(10, n);
             case "e^x" -> Math.pow(Math.E, n);
-            case "1/x" -> (1/n);
+            case "1/x" -> (1 / n);
             case "x^2" -> n * n;
             case "x^3" -> n * n * n;
             case "sin" -> isDegrees ? Math.sin(Math.toRadians(n)) : Math.sin(n);
@@ -508,6 +541,19 @@ public class Calculator {
         BigDecimal bd = BigDecimal.valueOf(n);
         bd = bd.setScale(10, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    public void refreshHistory() {
+        StringBuilder builder = new StringBuilder();
+        for (String str : historyList) {
+            builder.append(str).append(" ");
+        }
+        history.setText(builder.toString());
+    }
+
+    public void clearHistory() {
+        historyList.clear();
+        history.setText("");
     }
 
 }
