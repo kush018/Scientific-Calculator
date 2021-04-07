@@ -362,10 +362,27 @@ public class Calculator {
             }
         } else if (text.equals("+/-")) {
             String txt = display.getText();
-            if (txt.charAt(0) == '-') {
-                txt = txt.substring(1);
+            if (txt.contains("E")) {
+                String[] arr = txt.split("E");
+                if (arr.length == 1) {
+                    String[] temp = new String[2];
+                    temp[0] = arr[0];
+                    temp[1] = "-";
+                    arr = temp;
+                } else {
+                    if (arr[1].charAt(0) == '-') {
+                        arr[1] = arr[1].substring(1);
+                    } else {
+                        arr[1] = "-" + arr[1];
+                    }
+                }
+                txt = arr[0] + "E" + arr[1];
             } else {
-                txt = "-" + txt;
+                if (txt.charAt(0) == '-') {
+                    txt = txt.substring(1);
+                } else {
+                    txt = "-" + txt;
+                }
             }
             display.setText(txt);
         } else if (text.equals("C")) {
@@ -556,9 +573,22 @@ public class Calculator {
     }
 
     public double roundDouble(double n) {
-        BigDecimal bd = BigDecimal.valueOf(n);
-        bd = bd.setScale(10, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        int scale = 10;
+
+        String nAsString = Double.toString(n);
+        String[] arr = nAsString.split("E");
+
+        BigDecimal bd = new BigDecimal(arr[0]);
+        bd = bd.setScale(scale, RoundingMode.HALF_UP);
+        arr[0] = bd.toString();
+
+        if (arr.length == 1) {
+            return Double.parseDouble(arr[0]);
+        } else if (arr.length == 2) {
+            return Double.parseDouble(arr[0] + "E" + arr[1]);
+        } else {
+            throw new NumberFormatException(n + " not valid number");
+        }
     }
 
     public void refreshHistory() {
