@@ -11,17 +11,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class Calculator {
-    private JPanel basicButtonsPanel;
-    private JPanel scientificButtonsPanel;
-    private JPanel constantsPanel;
 
-    private JPanel panelPanel;
-    private JPanel panelPanelPanel;
-
-    private JFrame frame;
-
-    private ArrayList<JButton> basicButtonsList;
-    private ArrayList<JButton> scientificButtonsList;
+    private final ArrayList<JButton> basicButtonsList;
     //private ArrayList<JButton> constantButtonsList;
 
     private JLabel display;
@@ -46,9 +37,9 @@ public class Calculator {
 
     private boolean isDegrees;
 
-    private JLabel history;
+    private final JLabel history;
 
-    private ArrayList<String> historyList;
+    private final ArrayList<String> historyList;
 
     private boolean clearHistory;
 
@@ -73,7 +64,7 @@ public class Calculator {
         }
         assert robotoFont != null;
 
-        frame = new JFrame("Scientific Calculator");
+        JFrame frame = new JFrame("Scientific Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(0, 10));
 
@@ -141,7 +132,7 @@ public class Calculator {
             }
         };
 
-        panelPanelPanel = new JPanel();
+        JPanel panelPanelPanel = new JPanel();
         panelPanelPanel.setLayout(new BorderLayout(0, 10));
 
         JRadioButton degButton = new JRadioButton("deg");
@@ -167,10 +158,10 @@ public class Calculator {
 
         panelPanelPanel.add(radioButtonPanel, BorderLayout.NORTH);
 
-        panelPanel = new JPanel();
+        JPanel panelPanel = new JPanel();
         panelPanel.setLayout(new GridLayout(1, 2, 20, 10));
 
-        basicButtonsPanel = new JPanel();
+        JPanel basicButtonsPanel = new JPanel();
         basicButtonsPanel.setLayout(new GridLayout(6, 5, 10, 10));
 
         basicButtonsList = new ArrayList<>();
@@ -211,10 +202,10 @@ public class Calculator {
             basicButtonsPanel.add(button);
         }
 
-        scientificButtonsPanel = new JPanel();
+        JPanel scientificButtonsPanel = new JPanel();
         scientificButtonsPanel.setLayout(new GridLayout(5, 4, 10, 10));
 
-        scientificButtonsList = new ArrayList<>();
+        ArrayList<JButton> scientificButtonsList = new ArrayList<>();
         scientificButtonsList.add(new JButton("log"));
         scientificButtonsList.add(new JButton("ln"));
         scientificButtonsList.add(new JButton("!"));
@@ -250,7 +241,7 @@ public class Calculator {
 
         frame.add(panelPanelPanel, BorderLayout.CENTER);
 
-        constantsPanel = new JPanel();
+        JPanel constantsPanel = new JPanel();
         constantsPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 10));
 
         /*
@@ -278,9 +269,7 @@ public class Calculator {
 
         String[] constants = {"pi", "e", "c", "h", "R", "G", "Na", "qe", "me", "mp", "mn"};
         JComboBox constantsComboBox = new JComboBox(constants);
-        constantsComboBox.addActionListener((e) -> {
-            buttonPressed((String) constantsComboBox.getSelectedItem());
-        });
+        constantsComboBox.addActionListener((e) -> buttonPressed((String) constantsComboBox.getSelectedItem()));
         constantsComboBox.setPreferredSize(new Dimension(50, 32));
         constantsComboBox.setFocusable(false);
         constantsComboBox.setFont(robotoFont.deriveFont(BUTTON_FONT));
