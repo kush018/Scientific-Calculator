@@ -16,7 +16,7 @@ DefaultDirName={%USERPROFILE}\{#MyAppName}
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
-OutputDir=C:\Users\kushal2\IdeaProjects\Scientific Calculator\
+OutputDir=.
 OutputBaseFilename=installer
 Compression=lzma
 SolidCompression=yes
@@ -29,10 +29,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\kushal2\IdeaProjects\Scientific Calculator\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\kushal2\IdeaProjects\Scientific Calculator\Calculator.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\kushal2\IdeaProjects\Scientific Calculator\icon.png"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\kushal2\IdeaProjects\Scientific Calculator\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Calculator.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "icon.png"; DestDir: "{app}"; Flags: ignoreversion
+Source: "fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\kushal2\java\*"; DestDir: "{app}\java"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

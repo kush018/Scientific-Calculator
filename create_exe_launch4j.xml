@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\kushal2\IdeaProjects\Scientific Calculator\calc.jar</jar>
-  <outfile>C:\Users\kushal2\IdeaProjects\Scientific Calculator\Calculator.exe</outfile>
+  <jar>calc.jar</jar>
+  <outfile>Calculator.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\Users\kushal2\IdeaProjects\Scientific Calculator\calc_icon.ico</icon>
+  <icon>calc_icon.ico</icon>
   <jre>
     <path>java</path>
     <bundledJre64Bit>false</bundledJre64Bit>
