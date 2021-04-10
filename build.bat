@@ -1,7 +1,12 @@
 @echo off
-cd "C:\Users\kushal2\IdeaProjects\Scientific Calculator"
+
+::Change the below path to the path to launch4j
+set launch4j="D:\launch4j"
+::Change the below path to the path to inno setup
+set innosetup="C:\Program Files (x86)\Inno Setup 6"
+
 javac -d ./ src/*.java
 jar mfcv "out/production/Scientific Calculator/META-INF/MANIFEST.MF" calc.jar *.class
-java -jar D:\launch4j\launch4j.jar create_exe_launch4j.xml
-"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" create_installer.iss
+java -jar %launch4j%\launch4j.jar create_exe_launch4j.xml
+%innosetup%\ISCC.exe create_installer.iss
 pause

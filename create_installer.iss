@@ -5,6 +5,9 @@
 #define MyAppVersion "1.0"
 #define MyAppExeName "Calculator.exe"
 
+; Change the below path to path to compatible JRE to be bundled with the application
+#define JREPath "C:\Users\kushal2\java"
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -33,7 +36,7 @@ Source: "{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Calculator.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "icon.png"; DestDir: "{app}"; Flags: ignoreversion
 Source: "fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\kushal2\java\*"; DestDir: "{app}\java"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#JREPath}\*"; DestDir: "{app}\java"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
