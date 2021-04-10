@@ -45,7 +45,7 @@ Then, you will have to execute the commands given above to compile the program
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENCE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENCE](LICENSE) file for details
 
 Calculator icon found [here](https://freeiconshop.com/icon/calculator-icon-flat/)
 
