@@ -3,52 +3,9 @@
 
 ## Running the calculator program
 
-Instructions on how to compile and run the calculator program
+In order to run the program for yourself, just go to the "Releases" section and download the installer executable file, then run it and install the application on your computer.
 
-### Prerequisites
-In order to compile the program, it is necessary to have JDK installed on your system.
-To run the compiled program, you need to have JRE (if you already have JDK installed JRE need not be installed)
-
-### Compiling and Running the Program
-First, clone the repository by:
-
-```
-git clone https://github.com/kush018/Scientific-Calculator.git
-```
-
-Then, change the directory to the directory where the repository got cloned by:
-
-```
-cd Scientific-Calculator
-```
-
-Now, to compile the code:
-
-```
-javac -d ./ src/*.java
-```
-
-To run the code:
-
-```
-java Main
-```
-
-After typing the above command, the calculator should be running on your computer
-
-Although this works, its an inconvenient way of running the program as one would have to open the command line everytime he/she wants to calculate something
-To solve this problem, we can create a .jar (Java Archive) which can just be double clicked to run the application
-
-To create the .jar file, type the following command:
-
-```
-jar mfcv "out/production/Scientific Calculator/META-INF/MANIFEST.MF" calc.jar *.class
-```
-
-You may replace calc.jar with a name of your choice. (this is the name of the .jar file)
-
-While running, make sure that the folders "fonts" and the file "icon.png" are in the same directory as the .jar file.
-If these files are not present in the same directory as the .jar file, the program will run unexpectedly or fail to run altogether
+However, this will only work for windows users. If you are not a windows user, you will have to compile the code yourself. To learn how to compile the code by yourself, see [COMPILE.md](COMPILE.md). It also contains information on how to create the windows installer executable on your own.
 
 ## User Manual
 
@@ -89,3 +46,7 @@ Then, you will have to execute the commands given above to compile the program
 ## License
 
 This project is licensed under the MIT License - see the [LICENCE.md](LICENSE.md) file for details
+
+Calculator icon found [here](https://freeiconshop.com/icon/calculator-icon-flat/)
+
+Font used by calculator - [Roboto](https://fonts.google.com/specimen/Roboto)
