@@ -31,18 +31,6 @@ These shortcuts have been given below.
 - F8 can be used to display the calculators memory
 - F5 can be used to add whatever is in the display to the calculators memory
 
-## Updating the program
-
-Required to make sure the program is up-to-date with all the latest updates
-
-To update the source code in your local clone of the repository, type:
-
-```
-git pull https://github.com/kush018/Scientific-Calculator.git
-```
-
-Then, you will have to execute the commands given above to compile the program
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENCE](LICENSE) file for details
