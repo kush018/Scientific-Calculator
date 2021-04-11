@@ -643,6 +643,9 @@ public class Calculator {
         int scale = 10;
 
         String nAsString = Double.toString(n);
+        if (nAsString.equals("NaN")) {
+            return n;
+        }
         String[] arr = nAsString.split("E");
 
         BigDecimal bd = new BigDecimal(arr[0]);
