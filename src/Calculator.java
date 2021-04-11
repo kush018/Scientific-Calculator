@@ -278,6 +278,7 @@ public class Calculator {
 
         JButton qeButton = new JButton("QE Solver!");
         qeButton.setFont(robotoFont.deriveFont(BUTTON_FONT));
+        qeButton.setFocusable(false);
         Font finalRobotoFont = robotoFont;
         qeButton.addActionListener((e) -> {
             JFrame qeFrame = new JFrame("Quadratic Equation Solver");
