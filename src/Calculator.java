@@ -276,6 +276,83 @@ public class Calculator {
 
         constantsPanel.add(constantsComboBox);
 
+        JButton qeButton = new JButton("QE Solver!");
+        qeButton.setFont(robotoFont.deriveFont(BUTTON_FONT));
+        Font finalRobotoFont = robotoFont;
+        qeButton.addActionListener((e) -> {
+            JFrame qeFrame = new JFrame("Quadratic Equation Solver");
+            qeFrame.setIconImage(icon.getImage());
+            qeFrame.setLocationRelativeTo(frame);
+            qeFrame.setLayout(new GridLayout(3, 1));
+
+            JPanel inputPanel = new JPanel();
+            inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
+            Dimension textFieldDimension = new Dimension(200, 30);
+
+            JTextField aTextField = new JTextField();
+            aTextField.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            aTextField.setPreferredSize(textFieldDimension);
+            JTextField bTextField = new JTextField();
+            bTextField.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            bTextField.setPreferredSize(textFieldDimension);
+            JTextField cTextField = new JTextField();
+            cTextField.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            cTextField.setPreferredSize(textFieldDimension);
+
+            JLabel aLabel = new JLabel("x^2 + ");
+            aLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            JLabel bLabel = new JLabel("x + ");
+            bLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            JLabel zeroLabel = new JLabel(" = 0");
+            zeroLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+
+            inputPanel.add(aTextField);
+            inputPanel.add(aLabel);
+            inputPanel.add(bTextField);
+            inputPanel.add(bLabel);
+            inputPanel.add(cTextField);
+            inputPanel.add(zeroLabel);
+
+            qeFrame.add(inputPanel);
+
+            JLabel solutionLabel = new JLabel();
+
+            JPanel solveButtonPanel = new JPanel();
+            solveButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            JButton solveButton = new JButton("Solve!");
+            solveButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            solveButton.addActionListener((event) -> {
+                try {
+                    double a = Double.parseDouble(aTextField.getText());
+                    double b = Double.parseDouble(bTextField.getText());
+                    double c = Double.parseDouble(cTextField.getText());
+                    double alpha = (-b + Math.sqrt(b * b - 4 * a * c)) / 2 * a;
+                    double beta = (-b - Math.sqrt(b * b - 4 * a * c)) / 2 * a;
+                    solutionLabel.setText("Alpha: " + roundDouble(alpha) + ", Beta: " + roundDouble(beta));
+                } catch (NumberFormatException exception) {
+                    solutionLabel.setText("Invalid numbers entered!");
+                }
+            });
+            solveButton.setFocusable(false);
+            solveButtonPanel.add(solveButton);
+
+            qeFrame.add(solveButtonPanel);
+
+            JPanel solutionsPanel = new JPanel();
+            solutionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            solutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            solutionsPanel.add(solutionLabel);
+
+            qeFrame.add(solutionsPanel);
+
+            qeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            qeFrame.pack();
+            qeFrame.setVisible(true);
+        });
+
+        constantsPanel.add(qeButton);
+
         frame.add(constantsPanel, BorderLayout.SOUTH);
 
         JPanel displayPanel = new JPanel();
