@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,6 +40,8 @@ public class Calculator {
 
     private boolean clearHistory;
 
+    private JFrame qeFrame;
+
     public Calculator() {
         resetDisplay = false;
         status = BEGIN;
@@ -55,6 +54,8 @@ public class Calculator {
         historyList = new ArrayList<>();
 
         clearHistory = false;
+
+        qeFrame = null;
 
         Font robotoFont = null;
         try {
@@ -281,10 +282,23 @@ public class Calculator {
         qeButton.setFocusable(false);
         Font finalRobotoFont = robotoFont;
         qeButton.addActionListener((e) -> {
-            JFrame qeFrame = new JFrame("Quadratic Equation Solver");
+            if (qeFrame != null) {
+                //if a qeFrame instance is already running
+                qeFrame.toFront();
+                return;
+            }
+
+            qeFrame = new JFrame("Quadratic Equation Solver");
             qeFrame.setIconImage(icon.getImage());
             qeFrame.setLocationRelativeTo(frame);
-            qeFrame.setLayout(new GridLayout(3, 1));
+            qeFrame.setLayout(new GridLayout(4, 1));
+
+            qeFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    qeFrame = null;
+                }
+            });
 
             JPanel inputPanel = new JPanel();
             inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
@@ -317,7 +331,8 @@ public class Calculator {
 
             qeFrame.add(inputPanel);
 
-            JLabel solutionLabel = new JLabel();
+            JLabel alphaSolutionLabel = new JLabel("0.0");
+            JLabel betaSolutionLabel = new JLabel("0.0");
 
             JPanel solveButtonPanel = new JPanel();
             solveButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -330,9 +345,11 @@ public class Calculator {
                     double c = Double.parseDouble(cTextField.getText());
                     double alpha = (-b + Math.sqrt(b * b - 4 * a * c)) / 2 * a;
                     double beta = (-b - Math.sqrt(b * b - 4 * a * c)) / 2 * a;
-                    solutionLabel.setText("Alpha: " + roundDouble(alpha) + ", Beta: " + roundDouble(beta));
+                    alphaSolutionLabel.setText(Double.toString(alpha));
+                    betaSolutionLabel.setText(Double.toString(beta));
                 } catch (NumberFormatException exception) {
-                    solutionLabel.setText("Invalid numbers entered!");
+                    alphaSolutionLabel.setText("Invalid numbers entered");
+                    betaSolutionLabel.setText("Invalid numbers entered");
                 }
             });
             solveButton.setFocusable(false);
@@ -340,15 +357,61 @@ public class Calculator {
 
             qeFrame.add(solveButtonPanel);
 
-            JPanel solutionsPanel = new JPanel();
-            solutionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            solutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
-            solutionsPanel.add(solutionLabel);
+            JPanel alphaSolutionPanel = new JPanel();
+            alphaSolutionPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            alphaSolutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            JLabel alphaLabel = new JLabel("Alpha: ");
+            alphaLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            JButton alphaButton = new JButton("Use");
+            alphaButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            alphaButton.setFocusable(false);
+            alphaButton.addActionListener((ea) -> {
+                display.setText(alphaSolutionLabel.getText());
+                resetDisplay = true;
+            });
+            alphaSolutionPanel.add(alphaLabel);
+            alphaSolutionPanel.add(alphaSolutionLabel);
+            alphaSolutionPanel.add(alphaButton);
 
-            qeFrame.add(solutionsPanel);
+            JPanel betaSolutionPanel = new JPanel();
+            betaSolutionPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            betaSolutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            JLabel betaLabel = new JLabel("Beta: ");
+            betaLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            JButton betaButton = new JButton("Use");
+            betaButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            betaButton.setFocusable(false);
+            betaButton.addActionListener((eb) -> {
+                display.setText(betaSolutionLabel.getText());
+                resetDisplay = true;
+            });
+            betaSolutionPanel.add(betaLabel);
+            betaSolutionPanel.add(betaSolutionLabel);
+            betaSolutionPanel.add(betaButton);
+
+            qeFrame.add(alphaSolutionPanel);
+            qeFrame.add(betaSolutionPanel);
+
+            qeFrame.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    switch (e.getKeyChar()) {
+                        case 'a', 'A' -> alphaButton.doClick();
+                        case 'b', 'B' -> betaButton.doClick();
+                    }
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_ENTER -> solveButton.doClick();
+                    }
+                }
+            });
 
             qeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             qeFrame.pack();
+            qeFrame.setResizable(false);
             qeFrame.setVisible(true);
         });
 
@@ -640,24 +703,25 @@ public class Calculator {
     }
 
     public double roundDouble(double n) {
-        int scale = 10;
+        try {
+            int scale = 10;
 
-        String nAsString = Double.toString(n);
-        if (nAsString.equals("NaN")) {
+            String nAsString = Double.toString(n);
+            String[] arr = nAsString.split("E");
+
+            BigDecimal bd = new BigDecimal(arr[0]);
+            bd = bd.setScale(scale, RoundingMode.HALF_UP);
+            arr[0] = bd.toString();
+
+            if (arr.length == 1) {
+                return Double.parseDouble(arr[0]);
+            } else if (arr.length == 2) {
+                return Double.parseDouble(arr[0] + "E" + arr[1]);
+            } else {
+                throw new NumberFormatException(n + " not valid number");
+            }
+        } catch (NumberFormatException e) {
             return n;
-        }
-        String[] arr = nAsString.split("E");
-
-        BigDecimal bd = new BigDecimal(arr[0]);
-        bd = bd.setScale(scale, RoundingMode.HALF_UP);
-        arr[0] = bd.toString();
-
-        if (arr.length == 1) {
-            return Double.parseDouble(arr[0]);
-        } else if (arr.length == 2) {
-            return Double.parseDouble(arr[0] + "E" + arr[1]);
-        } else {
-            throw new NumberFormatException(n + " not valid number");
         }
     }
 
