@@ -305,6 +305,13 @@ public class Calculator {
 
             Dimension textFieldDimension = new Dimension(200, 30);
 
+            JPanel aPanel = new JPanel();
+            JPanel bPanel = new JPanel();
+            JPanel cPanel = new JPanel();
+            aPanel.setLayout(new GridLayout(2, 1, 10, 10));
+            bPanel.setLayout(new GridLayout(2, 1, 10, 10));
+            cPanel.setLayout(new GridLayout(2, 1, 10, 10));
+
             JTextField aTextField = new JTextField();
             aTextField.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
             aTextField.setPreferredSize(textFieldDimension);
@@ -322,11 +329,32 @@ public class Calculator {
             JLabel zeroLabel = new JLabel(" = 0");
             zeroLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
 
-            inputPanel.add(aTextField);
+            aPanel.add(aTextField);
+            bPanel.add(bTextField);
+            cPanel.add(cTextField);
+
+            JButton aMRButton = new JButton("MR");
+            JButton bMRButton = new JButton("MR");
+            JButton cMRButton = new JButton("MR");
+            aMRButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            bMRButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            cMRButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            aMRButton.addActionListener((e1) -> aTextField.setText(Double.toString(memory)));
+            bMRButton.addActionListener((e2) -> bTextField.setText(Double.toString(memory)));
+            cMRButton.addActionListener((e3) -> cTextField.setText(Double.toString(memory)));
+            aMRButton.setFocusable(false);
+            bMRButton.setFocusable(false);
+            cMRButton.setFocusable(false);
+
+            aPanel.add(aMRButton);
+            bPanel.add(bMRButton);
+            cPanel.add(cMRButton);
+
+            inputPanel.add(aPanel);
             inputPanel.add(aLabel);
-            inputPanel.add(bTextField);
+            inputPanel.add(bPanel);
             inputPanel.add(bLabel);
-            inputPanel.add(cTextField);
+            inputPanel.add(cPanel);
             inputPanel.add(zeroLabel);
 
             qeFrame.add(inputPanel);
@@ -337,7 +365,7 @@ public class Calculator {
             JPanel solveButtonPanel = new JPanel();
             solveButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
             JButton solveButton = new JButton("Solve!");
-            solveButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            solveButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             solveButton.addActionListener((event) -> {
                 try {
                     double a = Double.parseDouble(aTextField.getText());
@@ -359,15 +387,18 @@ public class Calculator {
 
             JPanel alphaSolutionPanel = new JPanel();
             alphaSolutionPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            alphaSolutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            alphaSolutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             JLabel alphaLabel = new JLabel("Alpha: ");
-            alphaLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            alphaLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             JButton alphaButton = new JButton("Use");
-            alphaButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            alphaButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             alphaButton.setFocusable(false);
             alphaButton.addActionListener((ea) -> {
                 display.setText(alphaSolutionLabel.getText());
                 resetDisplay = true;
+                if (status == ENTER_OPERATION) {
+                    status = ENTER_OPERAND2;
+                }
             });
             alphaSolutionPanel.add(alphaLabel);
             alphaSolutionPanel.add(alphaSolutionLabel);
@@ -375,15 +406,18 @@ public class Calculator {
 
             JPanel betaSolutionPanel = new JPanel();
             betaSolutionPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-            betaSolutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            betaSolutionLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             JLabel betaLabel = new JLabel("Beta: ");
-            betaLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            betaLabel.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             JButton betaButton = new JButton("Use");
-            betaButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT));
+            betaButton.setFont(finalRobotoFont.deriveFont(BUTTON_FONT * 1.5f));
             betaButton.setFocusable(false);
             betaButton.addActionListener((eb) -> {
                 display.setText(betaSolutionLabel.getText());
                 resetDisplay = true;
+                if (status == ENTER_OPERATION) {
+                    status = ENTER_OPERAND2;
+                }
             });
             betaSolutionPanel.add(betaLabel);
             betaSolutionPanel.add(betaSolutionLabel);
@@ -391,23 +425,6 @@ public class Calculator {
 
             qeFrame.add(alphaSolutionPanel);
             qeFrame.add(betaSolutionPanel);
-
-            qeFrame.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    switch (e.getKeyChar()) {
-                        case 'a', 'A' -> alphaButton.doClick();
-                        case 'b', 'B' -> betaButton.doClick();
-                    }
-                }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    switch (e.getKeyCode()) {
-                        case KeyEvent.VK_ENTER -> solveButton.doClick();
-                    }
-                }
-            });
 
             qeFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             qeFrame.pack();
