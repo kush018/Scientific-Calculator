@@ -373,8 +373,8 @@ public class Calculator {
                     double c = Double.parseDouble(cTextField.getText());
                     double alpha = (-b + Math.sqrt(b * b - 4 * a * c)) / 2 * a;
                     double beta = (-b - Math.sqrt(b * b - 4 * a * c)) / 2 * a;
-                    alphaSolutionLabel.setText(Double.toString(alpha));
-                    betaSolutionLabel.setText(Double.toString(beta));
+                    alphaSolutionLabel.setText(Double.toString(roundDouble(alpha)));
+                    betaSolutionLabel.setText(Double.toString(roundDouble(beta)));
                 } catch (NumberFormatException exception) {
                     alphaSolutionLabel.setText("Invalid numbers entered");
                     betaSolutionLabel.setText("Invalid numbers entered");
